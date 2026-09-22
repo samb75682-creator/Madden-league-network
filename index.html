@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Madden League Network</title>
+<style>
+:root{--ink:#101820;--red:#d71920;--purple:#4f2683;--gold:#ffc62f;--bg:#eef1f5;--card:#fff;--muted:#697582}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+.top{background:#111820;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:21px}.brand em{color:#e31b23;font-style:normal}.live{font-size:11px;font-weight:900}.live i{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;margin-right:6px}
+nav{background:#fff;border-bottom:1px solid #d5dbe1;display:flex;overflow:auto;padding:0 8px}nav button{background:none;border:0;padding:15px;font-size:12px;font-weight:900;white-space:nowrap}nav button.active{color:var(--red);border-bottom:3px solid var(--red)}
+main{max-width:1250px;margin:auto;padding:18px}.page{display:none}.page.active{display:block}.hero{background:linear-gradient(110deg,#4f2683,#7750a7);color:#fff;border-radius:12px;padding:25px;display:flex;justify-content:space-between;gap:20px}.hero h1{font-size:34px;margin:6px 0}.hero p{margin:0;color:#e8e1ef}.badge{background:#fff;color:#24132f;border-radius:10px;padding:14px 18px;min-width:155px;text-align:center}.badge b{font-size:19px;display:block}.grid{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-top:15px}.card{background:var(--card);border:1px solid #d8dee5;border-radius:10px;padding:17px}.card h2{font-size:16px;margin:0 0 13px}.headline{font-size:26px;font-weight:900;line-height:1.08}.muted{color:var(--muted);font-size:13px}.stat{font-size:31px;font-weight:900}.row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid #e5e8ec}.row:first-child{border-top:0}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#f0f2f5;text-align:left;padding:9px}td{padding:9px;border-top:1px solid #e4e8ec}.center{text-align:center}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.team{background:#fff;border:1px solid #d8dee5;border-radius:10px;padding:14px}.pill{display:inline-block;background:#edf0f4;border-radius:5px;padding:4px 7px;font-size:10px;font-weight:900}.sync{margin-top:15px;background:#111820;color:#fff;border-radius:10px;padding:14px}.ok{color:#52e18a;font-weight:900}.error{color:#ff8f8f;font-weight:900}.footer{text-align:center;color:#7c8791;padding:24px;font-size:11px}
+@media(max-width:800px){.grid,.cards{grid-template-columns:1fr}.hero{flex-direction:column}.hero h1{font-size:28px}.badge{text-align:left;width:100%}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">MADDEN <em>LEAGUE</em> NETWORK</div><div class="live"><i></i><span id="status">CONNECTING</span></div></header>
+<nav id="nav"></nav>
+<main>
+<section class="page active" id="home">
+<div class="hero"><div><div class="muted" style="color:#ded7e7">2026 SEASON • DATA-CONNECTED EDITION</div><h1>THE LEAGUE IS BUILT.</h1><p>Real Madden export data. One league hub.</p></div><div class="badge"><b>MINNESOTA</b>VIKINGS HQ</div></div>
+<div class="grid"><div class="card"><h2>LEAGUE DESK</h2><div class="headline" id="headline">Waiting for Madden data…</div><p class="muted" id="headlineSub">Once the Companion App sends the export to this server, the dashboard reads it automatically.</p><div class="row"><span>Teams received</span><b id="teamCount">0</b></div><div class="row"><span>Players received</span><b id="playerCount">0</b></div></div>
+<div class="card"><h2>VIKINGS</h2><div class="stat" id="vikingsRecord">—</div><div class="muted">Current record</div><div style="margin-top:15px" class="row"><span>Latest update</span><b id="updated">—</b></div></div></div>
+<div class="sync"><b>DATA PIPELINE</b><br><span id="pipeline" class="ok">Server ready. Waiting for an export.</span></div>
+</section>
+<section class="page" id="standings"><div class="card"><h2>STANDINGS</h2><table><thead><tr><th>#</th><th>Team</th><th class="center">W</th><th class="center">L</th><th class="center">T</th><th class="center">PF</th><th class="center">PA</th></tr></thead><tbody id="standingsBody"></tbody></table></div></section>
+<section class="page" id="scores"><div class="card"><h2>SCORES</h2><div id="scoresBody" class="muted">No schedule data yet.</div></div></section>
+<section class="page" id="teams"><div class="cards" id="teamsBody"></div></section>
+<section class="page" id="players"><div class="card"><h2>PLAYERS</h2><div id="playersBody" class="muted">No roster data yet.</div></div></section>
+<section class="page" id="stats"><div class="card"><h2>PLAYER STATS</h2><div id="statsBody" class="muted">No weekly stats yet.</div></div></section>
+<section class="page" id="schedule"><div class="card"><h2>SCHEDULE</h2><div id="scheduleBody" class="muted">No schedule data yet.</div></div></section>
+<section class="page" id="news"><div class="card"><h2>NETWORK NEWS</h2><div id="newsBody"></div></div></section>
+<section class="page" id="playoffs"><div class="card"><h2>PLAYOFF PICTURE</h2><p class="muted">The playoff race will be calculated from the standings as the season develops.</p></div></section>
+<section class="page" id="history"><div class="card"><h2>HISTORY</h2><p class="muted">This connected build stores the latest franchise export so the dashboard can grow into a season record book.</p></div></section>
+</main><div class="footer">Madden League Network • Unofficial fan-made dashboard • Not affiliated with EA or ESPN</div>
+<script>
+const tabs=["HOME","SCORES","STANDINGS","TEAMS","PLAYERS","STATS","SCHEDULE","NEWS","PLAYOFFS","HISTORY"];
+for(const t of tabs){const b=document.createElement("button");b.textContent=t;b.onclick=()=>show(t.toLowerCase());if(t==="HOME")b.classList.add("active");nav.appendChild(b)}
+function show(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach((b,i)=>b.classList.toggle("active",tabs[i].toLowerCase()===id))}
+function val(o,...keys){for(const k of keys)if(o&&o[k]!==undefined&&o[k]!==null)return o[k];return null}
+function teamName(x){return val(x,"teamName","displayName","name","teamFullName")||("Team "+val(x,"teamId"))}
+function record(x){const w=Number(val(x,"winCount","wins","w","totalWins")||0),l=Number(val(x,"lossCount","losses","l","totalLosses")||0),t=Number(val(x,"tieCount","ties","t","totalTies")||0);return `${w}-${l}-${t}`}
+function render(d){
+ status.textContent=d.updatedAt?"CONNECTED":"WAITING";
+ teamCount.textContent=(d.teams||[]).length;playerCount.textContent=(d.players||[]).length;
+ updated.textContent=d.updatedAt?new Date(d.updatedAt).toLocaleString():"—";
+ const vk=(d.standings||[]).filter(x=>/vikings/i.test(teamName(x))).sort((a,b)=>Number(val(b,"weekIndex")||0)-Number(val(a,"weekIndex")||0))[0];
+ vikingsRecord.textContent=vk?record(vk):"—";
+ headline.textContent=d.updatedAt?"Madden franchise data is connected.":"Waiting for Madden data…";
+ headlineSub.textContent=d.updatedAt?"The latest Companion App export is feeding the league dashboard.":"Send the Companion App export to this site's URL after deployment.";
+ standingsBody.innerHTML=(d.standings||[]).slice().sort((a,b)=>record(b).localeCompare(record(a))).map((x,i)=>`<tr><td>${i+1}</td><td><b>${teamName(x)}</b></td><td class="center">${val(x,"winCount","wins","w")??0}</td><td class="center">${val(x,"lossCount","losses","l")??0}</td><td class="center">${val(x,"tieCount","ties","t")??0}</td><td class="center">${val(x,"pointsFor","pf","totalPointsFor")??0}</td><td class="center">${val(x,"pointsAgainst","pa","totalPointsAgainst")??0}</td></tr>`).join("")||`<tr><td colspan="7">No standings received yet.</td></tr>`;
+ teamsBody.innerHTML=(d.teams||[]).map(x=>`<div class="team"><b>${teamName(x)}</b><p class="muted">Team ID: ${val(x,"teamId")??"—"}</p><span class="pill">TEAM HQ</span></div>`).join("")||`<div class="card">No teams received yet.</div>`;
+ playersBody.innerHTML=(d.players||[]).slice(0,100).map(x=>`<div class="row"><span><b>${val(x,"firstName","first_name")||""} ${val(x,"lastName","last_name")||val(x,"name","playerName")||"Player"}</b></span><span>${val(x,"position","positionName")||""} ${val(x,"overallRating","overall","ovr")??""}</span></div>`).join("")||"No roster data yet.";
+ const weeks=Object.entries(d.weeks||{}); const allSchedules=weeks.flatMap(([wk,x])=>(x.schedules||[]).map(s=>({...s,_wk:wk})));
+ scheduleBody.innerHTML=allSchedules.slice(-30).map(s=>`<div class="row"><span>${val(s,"awayTeamName","awayTeam","away")||"Away"} @ ${val(s,"homeTeamName","homeTeam","home")||"Home"}</span><b>${val(s,"awayScore","awayPoints")??"—"} - ${val(s,"homeScore","homePoints")??"—"}</b></div>`).join("")||"No schedule data yet.";
+ scoresBody.innerHTML=allSchedules.filter(s=>val(s,"awayScore","homeScore","awayPoints","homePoints")!==null).slice(-20).map(s=>`<div class="row"><span>${val(s,"awayTeamName","awayTeam","away")||"Away"} @ ${val(s,"homeTeamName","homeTeam","home")||"Home"}</span><b>${val(s,"awayScore","awayPoints")??0} - ${val(s,"homeScore","homePoints")??0}</b></div>`).join("")||"No completed scores found yet.";
+ const stats=weeks.flatMap(([wk,x])=>Object.entries(x).filter(([k])=>["passing","rushing","receiving","defense"].includes(k)).flatMap(([k,a])=>(Array.isArray(a)?a:[]).map(r=>({...r,_type:k,_wk:wk}))));
+ statsBody.innerHTML=stats.slice(-50).map(s=>`<div class="row"><span>${val(s,"playerName","name")||"Player"} <span class="muted">${s._type}</span></span><b>${val(s,"yards","passingYards","rushingYards","receivingYards")??"—"} yds</b></div>`).join("")||"No weekly player stats yet.";
+ newsBody.innerHTML=`<div class="row"><span><b>DATA UPDATE</b><br><span class="muted">Latest franchise export received.</span></span><b>${d.updatedAt?new Date(d.updatedAt).toLocaleDateString():"—"}</b></div>`;
+}
+async function load(){try{const r=await fetch("/api/data",{cache:"no-store"});render(await r.json())}catch(e){status.textContent="OFFLINE";pipeline.textContent="Could not reach the league data server.";pipeline.className="error"}}
+load();setInterval(load,30000);
+</script>
+</body></html>
